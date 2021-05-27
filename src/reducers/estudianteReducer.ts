@@ -1,4 +1,5 @@
-import { GET_ESTUDIANTES } from '../actions/estudianteAction';
+import { GET_ESTUDIANTES, ADD_ESTUDIANTE} from '../actions/estudianteAction';
+import { Estudiante } from '../interfaces/estudiante';
 
 interface Action {
   type:string,
@@ -6,18 +7,18 @@ interface Action {
 }
 
 const initialStateEstudiante = {
-  listaEstudiante:[],
-  nombre:'',
-  edad:'',
-  telefono:''
+  listaEstudiante:[] as Estudiante[],
 }
 
 export function estudianteReducer(state = initialStateEstudiante, action:Action) {
     switch (action.type) {
       case GET_ESTUDIANTES:
         return {
-             ...state,
-             listaEstudiante:action.payload
+             listaEstudiante:action.payload,      
+        }
+      case ADD_ESTUDIANTE:
+        return {
+            listaEstudiante:[...state.listaEstudiante, action.payload]
         }
       default:
         return state

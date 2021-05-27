@@ -1,1 +1,2 @@
 export const GET_ESTUDIANTES = "GET_ESTUDIANTES";
+export const ADD_ESTUDIANTE = "ADD_ESTUDIANTE";
