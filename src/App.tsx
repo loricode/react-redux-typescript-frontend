@@ -1,11 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { useEffect, useState} from 'react';
-import {getEstudiantes, postEstudiante} from './http/apiEstudiante';
+import {getEstudiantes, postEstudiante, deleteEstudiante} from './http/apiEstudiante';
 import { connect } from "react-redux"
 import { Estudiante } from './interfaces/estudiante';
 
-function App({getEstudiantes, stateEstudiante, postEstudiante}:any) {
+function App({getEstudiantes, stateEstudiante, postEstudiante, deleteEstudiante}:any) {
 
   const [{nombre, edad, telefono}, setState] = useState({
     nombre:'',
@@ -30,6 +30,12 @@ function App({getEstudiantes, stateEstudiante, postEstudiante}:any) {
      telefono,
      [name]:value
   }) 
+ }
+
+ function removeEstudiante(id: number | undefined){
+   if(window.confirm("¡Desea eliminar el registro!")){
+     deleteEstudiante(id)
+   }
  }
 
  function clearInputs(){
@@ -69,9 +75,13 @@ function App({getEstudiantes, stateEstudiante, postEstudiante}:any) {
               Add
             </button>
          </form>
-        {stateEstudiante.listaEstudiante.map((item:Estudiante, i:number)=>(
-         <div key={i}>
+        {stateEstudiante.listaEstudiante.map((item:Estudiante)=>(
+         <div key={item.id}>
             <p>{item.nombre} - {item.edad} - {item.telefono}</p>
+            <button style={{padding:11, backgroundColor:"red", color:"white"}}
+                 onClick={() => removeEstudiante(item.id)}>
+                 X
+              </button>  
          </div>    
         ))}
     </div>
@@ -86,7 +96,8 @@ const mapStateToProps = (state:any) => {
 
 const mapDispatchToProps = {
   getEstudiantes,
-  postEstudiante
+  postEstudiante,
+  deleteEstudiante
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

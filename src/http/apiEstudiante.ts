@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { GET_ESTUDIANTES, ADD_ESTUDIANTE } from '../actions/estudianteAction'
+import
+{ GET_ESTUDIANTES,
+  ADD_ESTUDIANTE,
+  DELETE_ESTUDIANTE
+} from '../actions/estudianteAction'
 import { Estudiante } from '../interfaces/estudiante';
 
 export const getEstudiantes = () => async (dispatch:any) =>{
@@ -26,6 +30,20 @@ export const postEstudiante = (estudiante:Estudiante) => async (dispatch:any) =>
     dispatch({
       type: ADD_ESTUDIANTE,
       payload: estudiante
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+} 
+
+export const deleteEstudiante = (id:number) => async (dispatch:any) =>{
+  axios
+  .delete(`http://localhost:4000/estudiantes/${id}`)
+  .then(() => {
+    dispatch({
+      type: DELETE_ESTUDIANTE,
+      payload: id
     });
   })
   .catch((error) => {
