@@ -50,3 +50,14 @@ export const deleteEstudiante = (id:number) => async (dispatch:any) =>{
     console.log(error);
   });
 } 
+
+
+export const getEstudiante = (id:number) => async () =>{
+ return  (await axios.get(`http://localhost:4000/estudiantes/${id}`)).data
+} 
+
+
+
+
+
+

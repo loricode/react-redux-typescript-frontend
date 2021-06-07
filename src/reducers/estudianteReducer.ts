@@ -1,8 +1,7 @@
 import
 { GET_ESTUDIANTES,
   ADD_ESTUDIANTE,
-  DELETE_ESTUDIANTE,
-  UPDATE_ESTUDIANTE
+  DELETE_ESTUDIANTE
 } from '../actions/estudianteAction';
 import { Estudiante } from '../interfaces/estudiante';
 
@@ -30,11 +29,7 @@ export function estudianteReducer(state = initialStateEstudiante, action:Action)
         return {        
             listaEstudiante:state.listaEstudiante
                  .filter((item:Estudiante) => item.id !== action.payload)
-        }  
-      case UPDATE_ESTUDIANTE:
-         return {
-            
-         }  
+        }   
       default:
         return state
     }

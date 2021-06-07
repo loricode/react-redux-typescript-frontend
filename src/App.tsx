@@ -1,12 +1,18 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { useEffect, useState} from 'react';
-import {getEstudiantes, postEstudiante, deleteEstudiante} from './http/apiEstudiante';
+import {
+  getEstudiantes, 
+  postEstudiante,
+  deleteEstudiante,
+  getEstudiante
+} from './http/apiEstudiante';
 import { connect } from "react-redux"
 import { Estudiante } from './interfaces/estudiante';
 
-function App({getEstudiantes, stateEstudiante, postEstudiante, deleteEstudiante}:any) {
+function App({getEstudiantes, stateEstudiante, postEstudiante, deleteEstudiante, getEstudiante}:any) {
 
+  const [isCreate, setIsCreate ] = useState(true)
   const [{nombre, edad, telefono}, setState] = useState({
     nombre:'',
     edad:'',
@@ -19,7 +25,12 @@ function App({getEstudiantes, stateEstudiante, postEstudiante, deleteEstudiante}
 
  function addEstudiante(e:React.ChangeEvent<HTMLFormElement>){
    e.preventDefault();
-   postEstudiante({nombre, telefono, edad})
+   if(isCreate){
+    postEstudiante({nombre, telefono, edad})
+   }else{
+     
+   }
+   
    clearInputs()
  }
 
@@ -44,6 +55,15 @@ function App({getEstudiantes, stateEstudiante, postEstudiante, deleteEstudiante}
     edad:"",
     telefono:"",
  })
+ }
+
+ function getOneEstudiante(id:number | undefined){
+  getEstudiante(id).then((estudiante:Estudiante)=>{
+    setIsCreate(false)
+    setState(estudiante)
+    console.log(estudiante)
+  })
+  
  }
 
   return (
@@ -82,6 +102,10 @@ function App({getEstudiantes, stateEstudiante, postEstudiante, deleteEstudiante}
                  onClick={() => removeEstudiante(item.id)}>
                  X
               </button>  
+              <button style={{padding:11, backgroundColor:"green", color:"white"}}
+                 onClick={() => getOneEstudiante(item.id)}>
+                 Editar
+              </button>  
          </div>    
         ))}
     </div>
@@ -97,7 +121,8 @@ const mapStateToProps = (state:any) => {
 const mapDispatchToProps = {
   getEstudiantes,
   postEstudiante,
-  deleteEstudiante
+  deleteEstudiante,
+  getEstudiante
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
