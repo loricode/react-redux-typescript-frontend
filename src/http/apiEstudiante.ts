@@ -2,9 +2,11 @@ import axios from 'axios';
 import
 { GET_ESTUDIANTES,
   ADD_ESTUDIANTE,
-  DELETE_ESTUDIANTE
+  DELETE_ESTUDIANTE,
+  UPDATE_ESTUDIANTE
 } from '../actions/estudianteAction'
 import { Estudiante } from '../interfaces/estudiante';
+import alerSweet from 'sweetalert2';
 
 export const getEstudiantes = () => async (dispatch:any) =>{
     axios
@@ -43,7 +45,7 @@ export const deleteEstudiante = (id:number) => async (dispatch:any) =>{
   .then(() => {
     dispatch({
       type: DELETE_ESTUDIANTE,
-      payload: id
+      payload: {id}
     });
   })
   .catch((error) => {
@@ -52,12 +54,24 @@ export const deleteEstudiante = (id:number) => async (dispatch:any) =>{
 } 
 
 
-export const getEstudiante = (id:number) => async () =>{
+export const getEstudiante =  (id:number) => async () => {
  return  (await axios.get(`http://localhost:4000/estudiantes/${id}`)).data
 } 
 
 
-
-
-
-
+export const updateEstudiante = (estudiente:Estudiante) => async(dispatch:any) => {
+  axios.put(`http://localhost:4000/estudiantes`, estudiente)
+  .then((response) => {
+    const data = response.data;
+    if(data.msg === "updated"){
+      dispatch({
+        type: UPDATE_ESTUDIANTE,
+        payload: estudiente
+      });
+      alerSweet.fire("!Registro actualizado¡",'', 'success')
+    }  
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}

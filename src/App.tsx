@@ -5,15 +5,25 @@ import {
   getEstudiantes, 
   postEstudiante,
   deleteEstudiante,
-  getEstudiante
+  getEstudiante,
+  updateEstudiante
+  
 } from './http/apiEstudiante';
 import { connect } from "react-redux"
 import { Estudiante } from './interfaces/estudiante';
 
-function App({getEstudiantes, stateEstudiante, postEstudiante, deleteEstudiante, getEstudiante}:any) {
+
+function App(
+ {getEstudiantes, 
+  stateEstudiante,
+  postEstudiante,
+  deleteEstudiante,
+  getEstudiante,
+  updateEstudiante}:any) {
 
   const [isCreate, setIsCreate ] = useState(true)
-  const [{nombre, edad, telefono}, setState] = useState({
+  const [{id, nombre, edad, telefono}, setState] = useState({
+    id:'',
     nombre:'',
     edad:'',
     telefono:''
@@ -28,14 +38,15 @@ function App({getEstudiantes, stateEstudiante, postEstudiante, deleteEstudiante,
    if(isCreate){
     postEstudiante({nombre, telefono, edad})
    }else{
-     
+    updateEstudiante({id, nombre, telefono, edad})  
    }
-   
+   setIsCreate(true)
    clearInputs()
  }
 
  function handleInputChange(name:string, value:string){
   setState({
+     id,
      nombre,
      edad,
      telefono,
@@ -43,7 +54,7 @@ function App({getEstudiantes, stateEstudiante, postEstudiante, deleteEstudiante,
   }) 
  }
 
- function removeEstudiante(id: number | undefined){
+ function removeEstudiante(id:string){
    if(window.confirm("¡Desea eliminar el registro!")){
      deleteEstudiante(id)
    }
@@ -51,19 +62,19 @@ function App({getEstudiantes, stateEstudiante, postEstudiante, deleteEstudiante,
 
  function clearInputs(){
   setState({
+    id:"",
     nombre:"",
     edad:"",
     telefono:"",
  })
  }
 
- function getOneEstudiante(id:number | undefined){
-  getEstudiante(id).then((estudiante:Estudiante)=>{
-    setIsCreate(false)
-    setState(estudiante)
-    console.log(estudiante)
-  })
-  
+ function getOneEstudiante(id:string){
+     getEstudiante(id).then((estudiante:Estudiante)=>{
+     setIsCreate(false)
+     setState(estudiante)
+     console.log(estudiante)
+   })
  }
 
   return (
@@ -92,7 +103,7 @@ function App({getEstudiantes, stateEstudiante, postEstudiante, deleteEstudiante,
                value={telefono}
             />
             <button style={{padding:12, backgroundColor:"blue", color:"white"}}>
-              Add
+             {isCreate ? "Add": "Edit"} 
             </button>
          </form>
         {stateEstudiante.listaEstudiante.map((item:Estudiante)=>(
@@ -122,7 +133,8 @@ const mapDispatchToProps = {
   getEstudiantes,
   postEstudiante,
   deleteEstudiante,
-  getEstudiante
+  getEstudiante,
+  updateEstudiante
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

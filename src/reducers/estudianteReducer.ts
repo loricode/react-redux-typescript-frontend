@@ -1,13 +1,14 @@
 import
 { GET_ESTUDIANTES,
   ADD_ESTUDIANTE,
-  DELETE_ESTUDIANTE
+  DELETE_ESTUDIANTE,
+  UPDATE_ESTUDIANTE
 } from '../actions/estudianteAction';
 import { Estudiante } from '../interfaces/estudiante';
 
 interface Action {
   type:string,
-  payload:null
+  payload: Estudiante | null
 }
 
 const initialStateEstudiante = {
@@ -28,8 +29,16 @@ export function estudianteReducer(state = initialStateEstudiante, action:Action)
       case DELETE_ESTUDIANTE:
         return {        
             listaEstudiante:state.listaEstudiante
-                 .filter((item:Estudiante) => item.id !== action.payload)
+                 .filter((item:Estudiante) => item.id !== action.payload?.id)
         }   
+      case UPDATE_ESTUDIANTE:
+        const newArray = state.listaEstudiante
+        .filter((item:Estudiante) => item.id !== action.payload?.id)
+     
+        return {
+          listaEstudiante:[...newArray, action.payload]
+        }
+          
       default:
         return state
     }
